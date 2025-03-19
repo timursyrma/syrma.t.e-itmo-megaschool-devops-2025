@@ -1,0 +1,25 @@
+name: Helm Chart Lint
+
+on:
+  push:
+    paths:
+      - 'charts/**'
+  pull_request:
+    paths:
+      - 'charts/**'
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout code
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Lint Helm Chart
+        uses: azure/helm-check-action@v1
+        with:
+          chart: charts/

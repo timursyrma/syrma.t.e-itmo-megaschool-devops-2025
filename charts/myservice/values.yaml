@@ -1,0 +1,12 @@
+timeServer:
+    image: ifilyaninitmo/time-server-mega-itmo:main
+    port: 8001
+    replicaCount: 1
+
+authServer:
+    image: ifilyaninitmo/auth-server-mega-itmo:main
+    port: 8000
+    replicaCount: 1
+    env:
+      MONGODB_CONN_STR: "mongodb://mongodb-release.mongodb.svc.cluster.local:27017/auth"
+      TIMESERVER_URL: "http://time-server:8001"

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-server
+spec:
+  selector:
+      app: auth-server
+  ports: 
+    - protocol: TCP
+      port: {{ .Values.authServer.port }}
+      targetPort: {{ .Values.authServer.port }}
+

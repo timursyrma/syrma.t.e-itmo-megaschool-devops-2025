@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: time-server
+spec:
+  replicas: {{ .Values.timeServer.replicaCount }}
+  selector:
+    matchLabels:
+      app: time-server
+  template:
+    metadata:
+      labels:
+        app: time-server
+    spec:
+      containers:
+        - name: time-server
+          image: {{ .Values.timeServer.image }}
+          ports: 
+            - containerPort: {{ .Values.timeServer.port }}

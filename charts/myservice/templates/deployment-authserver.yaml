@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-server
+spec:
+  replicas: {{ .Values.authServer.replicaCount }}
+  selector:
+    matchLabels:
+      app: auth-server
+  template:
+    metadata:
+      labels:
+        app: auth-server
+    spec:
+      containers:
+        - name: auth-server
+          image: {{ .Values.authServer.image }}
+          ports: 
+            - containerPort: {{ .Values.authServer.port }}
+          env:
+            - name: MONGODB_CONN_STR
+              value: {{ .Values.authServer.env.MONGODB_CONN_STR | quote }}
+            - name: TIMESERVER_URL
+              value: {{ .Values.authServer.env.TIMESERVER_URL | quote }}

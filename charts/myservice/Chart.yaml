@@ -1,5 +1,5 @@
 apiVersion: v2
 name: myservice
-description: Helm Chart for deploying time-server and auth-server
+description: Helm Chart для развертывания time-server и auth-server
 version: 0.1.0
 appVersion: "1.0"

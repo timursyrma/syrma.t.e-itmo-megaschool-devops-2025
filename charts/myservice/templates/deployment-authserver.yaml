@@ -13,12 +13,12 @@ spec:
         app: auth-server
     spec:
       containers:
-        - name: auth-server
-          image: {{ .Values.authServer.image }}
-          ports: 
-            - containerPort: {{ .Values.authServer.port }}
-          env:
-            - name: MONGODB_CONN_STR
-              value: {{ .Values.authServer.env.MONGODB_CONN_STR | quote }}
-            - name: TIMESERVER_URL
-              value: {{ .Values.authServer.env.TIMESERVER_URL | quote }}
+      - name: auth-server
+        image: "{{ .Values.authServer.image }}"
+        ports:
+        - containerPort: {{ .Values.authServer.port }}
+        env:
+        - name: MONGODB_CONN_STR
+          value: "{{ .Values.authServer.env.MONGODB_CONN_STR }}"
+        - name: TIMESERVER_URL
+          value: "{{ .Values.authServer.env.TIMESERVER_URL }}"

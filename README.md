@@ -1,56 +1,57 @@
 # syrma.t.e-itmo-megaschool-devops-2025
 
-Развертывание сервиса с использованием Kubernetes (Minikube)
-Есть три образа, для которых нужно развернуть:
+```
+auth> show collections
+users
+auth> db.users.find().pretty()
+[
+  {
+    _id: ObjectId('67daf8e8fe0771e5ca51e944'),
+    full_name: 'Timur Syrma',
+    username: 'tsyrma',
+    password: 'superSecret123'
+  }
+]
+```
 
-MongoDB: image: mongo:5.0.15
-time-server: image: ifilyaninitmo/time-server-mega-itmo:main
-auth-server: image: ifilyaninitmo/auth-server-mega-itmo:main
-Для развертывания сервисов time-server и auth-server необходимо написать Helm-чарты
 
-1 Создать публичный GitHub-репозиторий с названием:
-вашафамилия.и(вашеимя).о(вашеотчество)-itmo-megaschool-devops-2025 (на английском языке)
+![](docs/helm_chart_deployment_in_minikube.png)
 
-Пример: ivanov.i.i-itmo-megaschool-devops-2025
 
-2 Настроить GitHub Workflow для проверки Helm-чарта, используя helm-check-action
+---
 
-3 Установить MongoDB на Minikube, используя Helm-чарт из репозитория:
-https://github.com/mongodb/helm-charts
 
-4 Создать базу данных в MongoDB и коллекцию:
+![](docs/auth_post_request_response.png)
 
-база данных: auth
-коллекция: users
-5 Добавить документ внутри коллекции users со следующей структурой:
 
-{
-  “_id”: ObjectId("случайноеЗначение"),
-  "full_name": "вашеИмя вашаФамилия",
-  "username": "вашЛогин",
-  "password": "вашПароль"
-} 
-Примечание: Вы должны создать вашеИмя, вашаФамилия и т.д., эти данные должны быть на латинице
+---
 
-6 Разработать Helm-чарт для развертывания сервисов:
 
-time-server: image: ifilyaninitmo/time-server-mega-itmo:main
-Порт 8001
-auth-server: image: ifilyaninitmo/auth-server-mega-itmo:main
-Порт 8000
-Переменная окружения MONGODB_CONN_STR
-Переменная окружения TIMESERVER_URL
-Примечание: Исходный код необходимо хранить в созданном GitHub-репозитории
+![](docs/auth_get_request_sync.png)
 
-7 Развернуть разработанный Helm-чарт в minikube, сделать скриншоты работоспособности
 
-8 Открыть в браузере Swagger сервиса auth-server и отправить POST запрос с username и password из добавленного документа в базу данных MongoDB
+---
 
-9 Сделать скриншот с Responses, где будут видны Curl, Request URL, Server Response, Response body и Response headers
 
-10 Отправить GET запрос с указанием ntp_server и token, полученный в ответ на отправленный POST запрос из 7 пункта
+```
+----- Pods logs: auth-server-84d45b7d4c-7vd6n -----
+2025-03-19 18:06:19.270 | SUCCESS  | app:startup:23 - All envvars are present, server successfully started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+http://time-server:8001
+INFO:     10.244.0.1:62578 - "GET /docs HTTP/1.1" 200 OK
+INFO:     10.244.0.1:62578 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     10.244.0.1:44908 - "POST /api/v1/auth-server/token HTTP/1.1" 403 Forbidden
+INFO:     10.244.0.1:58346 - "POST /api/v1/auth-server/token HTTP/1.1" 200 OK
+INFO:     10.244.0.1:55901 - "GET /api/v1/auth-server/sync?ntp_server=pool.ntp.org&token=myTokenValue HTTP/1.1" 404 Not Found
+INFO:     10.244.0.1:49443 - "GET /api/v1/auth-server/me?ntp_server=pool.ntp.org HTTP/1.1" 200 OK
 
-11 Сделать скриншот с Responses, где будут видны Curl, Request URL, Server Response, Response body и Response headers
-
-12 Вывести последние 10 строк логов всех приложений ранее задеплоенных в текстовом формате
-
+----- Pods logs: time-server-769cf86545-26c64 -----
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+2025-03-19 17:44:25.735 | INFO     | app:startup:11 - Running time server
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     10.244.0.17:60190 - "GET /api/v1/time-server/get_time?ntp_server=pool.ntp.org HTTP/1.1" 200 OK
+INFO:     10.244.0.17:60192 - "GET /api/v1/service-keys/get_svckey?svc_token=Timur+Syrma HTTP/1.1" 200 OK
+```

@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: time-server
 spec:
+  type: {{ .Values.timeServer.service.type | default "ClusterIP" }}
+  ports:
+  - port: {{ .Values.timeServer.service.port }}
+    targetPort: {{ .Values.timeServer.port }}
   selector:
-      app: time-server
-  ports: 
-    - protocol: TCP
-      port: {{ .Values.timeServer.port }}
-      targetPort: {{ .Values.timeServer.port }}
-
+    app: time-server

@@ -15,11 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Checkout code
+      - name: Set up Helm
         run: |
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
       - name: Lint Helm Chart
         uses: azure/helm-check-action@v1
         with:
           chart: charts/
+          

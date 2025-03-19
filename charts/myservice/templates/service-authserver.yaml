@@ -3,10 +3,12 @@ kind: Service
 metadata:
   name: auth-server
 spec:
+  type: {{ .Values.authServer.service.type | default "ClusterIP" }}
+  ports:
+  - port: {{ .Values.authServer.service.port }}
+    targetPort: {{ .Values.authServer.port }}
+    {{- if eq .Values.authServer.service.type "NodePort" }}
+    nodePort: {{ .Values.authServer.service.nodePort | default 32000 }}
+    {{- end }}
   selector:
-      app: auth-server
-  ports: 
-    - protocol: TCP
-      port: {{ .Values.authServer.port }}
-      targetPort: {{ .Values.authServer.port }}
-
+    app: auth-server

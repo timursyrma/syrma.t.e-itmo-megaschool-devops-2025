@@ -13,7 +13,7 @@ spec:
         app: time-server
     spec:
       containers:
-        - name: time-server
-          image: {{ .Values.timeServer.image }}
-          ports: 
-            - containerPort: {{ .Values.timeServer.port }}
+      - name: time-server
+        image: "{{ .Values.timeServer.image }}"
+        ports:
+        - containerPort: {{ .Values.timeServer.port }}

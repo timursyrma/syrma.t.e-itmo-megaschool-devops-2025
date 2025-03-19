@@ -1,26 +1,30 @@
-name: Helm Chart Lint
-
+name: Helm Lint
 on:
   push:
-    paths:
-      - 'charts/**'
+    branches:
+      - master
   pull_request:
-    paths:
-      - 'charts/**'
+    branches:
+      - "*"
 
 jobs:
   helm-lint:
+    name: Helm Lint
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-
-      - name: Lint Helm Chart
-        uses: azure/helm-check-action@v1
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          chart: charts/
-          
+          fetch-depth: 0
+
+      - name: Download dependencies MyService
+        run: |
+          helm dependency build charts/myservice
+
+      - name: helm-check MyService
+        uses: igabaydulin/helm-check-action@0.2.1
+        env:
+          CHART_LOCATION: charts/myservice
+          CHART_VALUES: charts/myservice/values.yaml
+
